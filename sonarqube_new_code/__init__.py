@@ -16,6 +16,8 @@ def sonarqube_new_code():
     parameters = parser.parse_args()
 
     r = requests.get("{}/api/project_analyses/search?project={}&category=VERSION&ps=500".format(parameters.url, parameters.project), auth=(parameters.token, ''))
+    if r.status_code != 200:
+        raise SystemExit(r.text)
 
     last_analyses = r.json()['analyses']
 
@@ -23,7 +25,9 @@ def sonarqube_new_code():
 
     last_version_analysis_key = last_version_analyses[0]['key']
 
-    requests.post("{}/api/new_code_periods/set?project={}&branch={}&type=SPECIFIC_ANALYSIS&value={}".format(parameters.url, parameters.project, parameters.branch, last_version_analysis_key), auth=(parameters.token, ''))
+    response = requests.post("{}/api/new_code_periods/set?project={}&branch={}&type=SPECIFIC_ANALYSIS&value={}".format(parameters.url, parameters.project, parameters.branch, last_version_analysis_key), auth=(parameters.token, ''))
+    if response.status_code != 200:
+        raise SystemExit(response.text)
 
 
 if __name__ == '__main__':
