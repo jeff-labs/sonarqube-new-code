@@ -17,6 +17,6 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/jeff-labs/sonarqube-new-code",
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['requests'],
     scripts=['bin/sonarqube_new_code']
 )
